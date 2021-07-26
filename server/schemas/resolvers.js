@@ -44,19 +44,19 @@ const resolvers = {
         console.log("here is the book id", args)
         if (context.user) {
           console.log("here is the user", context.user)
-          const updatedUser = await User.findOneAndUpdate(
-            { _id: user._id },
+          let updatedUser = await User.findByIdAndUpdate(
+            { _id: context.user._id },
             { $addToSet: { savedBooks: args } },
-            { new: true, runValidators: true }
+            { new: true }
           );
           console.log("updated User", updatedUser)
           return updatedUser;
         }
       },
       removeBook: async (parent, args, context) => {
-        const updatedUser = await User.findOneAndUpdate(
+        let updatedUser = await User.findOneAndUpdate(
           { _id: user._id },
-          { $pull: { savedBooks: { bookId: params.bookId } } },
+          { $pull: { savedBooks: { bookId: args.bookId } } },
           { new: true }
         );
         if (!updatedUser) {
